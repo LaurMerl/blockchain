@@ -1,3 +1,5 @@
+const SHA256 = require('crypto-js/sha256')
+
 class Block {
     constructor(timestamp, data) {
         // location of block
@@ -22,3 +24,5 @@ class Block {
 
     }
 }
+
+module.exports = Block;
