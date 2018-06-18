@@ -22,6 +22,10 @@ const initHttpServer = (myHttpPort) => {
         res.send(newBlock);
     });
 
+    app.get('/chainValid', (req, res) => {
+        res.send(Blockchain.checkValid());
+    });
+
     app.listen(myHttpPort, () => {
         console.log('Listening http on port: ' + myHttpPort);
     });
