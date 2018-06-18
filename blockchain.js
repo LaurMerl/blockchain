@@ -56,7 +56,7 @@ class Blockchain{
     };
 
     getAdjustedDifficulty(latestBlock, aBlockchain) {
-        const prevAdjustmentBlock = aBlockchain[blockchain.length - utils.DIFFICULTY_ADJUSTMENT_INTERVAL];
+        const prevAdjustmentBlock = aBlockchain[aBlockchain.length - utils.DIFFICULTY_ADJUSTMENT_INTERVAL];
         const timeExpected = utils.BLOCK_GENERATION_INTERVAL * utils.DIFFICULTY_ADJUSTMENT_INTERVAL;
         const timeTaken = latestBlock.timestamp - prevAdjustmentBlock.timestamp;
         if (timeTaken < timeExpected / 2) {
