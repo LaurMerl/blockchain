@@ -8,7 +8,7 @@ class Blockchain{
 
     // creates the very first block of our chain
     createGenesis() {
-        return new Block(0, utils.getCurrentTimestamp, this.getCurrentDate, "0");
+        return new Block(0, utils.getCurrentTimestamp, utils.getCurrentDate, "0");
     }
 
     // get the information about the most recent block

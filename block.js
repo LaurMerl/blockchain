@@ -13,14 +13,14 @@ class Block {
         // block’s own hash (derived from calculateHash)
         this.hash = this.calculateHash();
         // mining mechanism
-        this.nonce = 0;
+        this.difficulty = 0;
     }
 
     generateNextBlock(blockData, Blockchain) {
-        const previousBlock = Blockchain.latestBlock;
-        const difficulty = Blockchain.getDifficulty(Blockchain.getBlockchain);
-        console.log('difficulty: ' + difficulty);
-        debugger;
+        const previousBlock = Blockchain.latestBlock();
+        const chain = Blockchain.getBlockchain();
+        console.log(chain);
+        const difficulty = Blockchain.getDifficulty(chain);
         const nextIndex= previousBlock.index + 1;
         const nextTimestamp = utils.getCurrentTimestamp();
         const newBlock = this.mineBlock(nextIndex, previousBlock.hash, nextTimestamp, blockData, difficulty);
@@ -31,7 +31,7 @@ class Block {
 
     calculateHash() {
         // takes in every piece of the block object, throws it into a SHA256 function, and converts it into a string
-        return SHA256(this.index + this.previousHash + this.timestamp + this.data + this.nonce).toString();
+        return SHA256(this.index + this.previousHash + this.timestamp + this.data + this.difficulty).toString();
     }
 
     mineBlock(index, previousHash, timestamp, data, difficulty) {
