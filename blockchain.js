@@ -1,5 +1,6 @@
-const Block = require("./block");
-const utils = require("./utils");
+const Block = require( './block');
+const utils = require('./utils');
+const SHA256 = require('crypto-js/sha256')
 
 class Blockchain{
     constructor() {
@@ -8,7 +9,7 @@ class Blockchain{
 
     // creates the very first block of our chain
     createGenesis() {
-        return new Block(0, utils.getCurrentTimestamp, utils.getCurrentDate, "0");
+        return new Block(0, utils.getCurrentTimestamp(), utils.getCurrentDate, SHA256('0').toString(), 0);
     }
 
     // get the information about the most recent block
@@ -29,23 +30,15 @@ class Blockchain{
 
     // checks the the integrity of the blockchain
     checkValid() {
-        for(let i = 1; i < this.chain.length; i++) {
-            const currentBlock = this.chain[i];
-            const previousBlock = this.chain[i - 1];
-            // matching currentBlock.hash with currentBlock.calculateHash()
-            // checks if currentBlock’s info has been tampered with without updating currentBlock.hash
-            if (currentBlock.hash !== currentBlock.calculateHash()) {
-                return false;
-            }
-            // matching currentBlock.previousHash with previousBlock.hash
-            // checks whether or not a previousBlock has been tampered
-            if (currentBlock.previousHash !== previousBlock.hash) {
+        for (let i = 1; i < this.chain.length; i++) {
+            if (!Block.isValidNewBlock(this.chain[i], this.chain[i - 1])) {
                 return false;
             }
         }
         return true;
-    }
+    };
 
+    // retrieve the difficulty of the chain
     getDifficulty(aBlockchain) {
         const latestBlock = this.latestBlock();
         if (latestBlock.index % utils.DIFFICULTY_ADJUSTMENT_INTERVAL === 0 && latestBlock.index !== 0) {
@@ -55,6 +48,7 @@ class Blockchain{
         }
     };
 
+    // the difficulty must be adjusted in order to match the chain difficulty
     getAdjustedDifficulty(latestBlock, aBlockchain) {
         const prevAdjustmentBlock = aBlockchain[aBlockchain.length - utils.DIFFICULTY_ADJUSTMENT_INTERVAL];
         const timeExpected = utils.BLOCK_GENERATION_INTERVAL * utils.DIFFICULTY_ADJUSTMENT_INTERVAL;

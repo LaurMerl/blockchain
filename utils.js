@@ -13,11 +13,6 @@ const lookupTable = {
     'e': '1110', 'f': '1111'
 };
 
-const getCurrentDate = () => {
-    const today = new Date();
-    return today.getDate() + "/" + today.getMonth() + "/" + today.getFullYear();
-};
-
 const hexToBinary = (s) => {
     let ret = '';
     for (let i = 0; i < s.length; i = i + 1) {
@@ -34,6 +29,5 @@ module.exports = {
     BLOCK_GENERATION_INTERVAL,
     DIFFICULTY_ADJUSTMENT_INTERVAL,
     getCurrentTimestamp,
-    getCurrentDate,
     hexToBinary
 };
