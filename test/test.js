@@ -1,81 +1,154 @@
-const expect = require('chai').expect;
-const SHA256 = require('crypto-js/sha256')
+const { expect } = require('chai');
+const SHA256 = require('crypto-js/sha256');
+const Blockchain = require('../blockchain');
+const Block = require('../block');
 
-const blockchain = require( '../blockchain');
-const Blockchain = new blockchain();
-const block = require( '../block');
-const Block = new block();
+const blockchain = new Blockchain();
+const block = new Block();
 
-
+/* eslint-env mocha */
 describe('Mine new block', () => {
-    const newBlock = Block.generateNextBlock({ data: 'Some test data' }, Blockchain);
-    const chain = Blockchain.getBlockchain();
+  const newBlock = block.generateNextBlock('Some test data', blockchain);
+  const chain = blockchain.getBlockchain();
 
-    it('It should be mined', (done) => {
-        expect(chain).to.be.a('array').with.lengthOf(2);
-        done();
-    });
+  it('It should be mined', (done) => {
+    expect(chain)
+      .to.be.a('array')
+      .with.lengthOf(2);
+    done();
+  });
 
-    it('It should have the right structure', (done) => {
-        expect(newBlock).to.be.a('object');
-        expect(newBlock).to.have.property('index');
-        expect(newBlock.index).to.be.a('number');
+  it('It should have the right structure', (done) => {
+    expect(newBlock).to.be.a('object');
+    expect(newBlock).to.have.property('index');
+    expect(newBlock.index).to.be.a('number');
 
-        expect(newBlock).to.have.property('timestamp');
-        expect(newBlock.timestamp).to.be.a('number');
+    expect(newBlock).to.have.property('timestamp');
+    expect(newBlock.timestamp).to.be.a('number');
 
-        expect(newBlock).to.have.property('data');
-        expect(newBlock.data).to.be.a('string');
+    expect(newBlock).to.have.property('data');
+    expect(newBlock.data).to.be.a('string');
 
-        expect(newBlock).to.have.property('previousHash');
-        expect(newBlock.previousHash).to.be.a('string').of.length(64);
+    expect(newBlock).to.have.property('previousHash');
+    expect(newBlock.previousHash)
+      .to.be.a('string')
+      .of.length(64);
 
-        expect(newBlock).to.have.property('hash');
-        expect(newBlock.hash).to.be.a('string').of.length(64);
+    expect(newBlock).to.have.property('hash');
+    expect(newBlock.hash)
+      .to.be.a('string')
+      .of.length(64);
 
-        expect(newBlock).to.have.property('difficulty');
-        expect(newBlock.difficulty).to.be.a('number');
+    expect(newBlock).to.have.property('difficulty');
+    expect(newBlock.difficulty).to.be.a('number');
 
-        done();
-    });
+    done();
+  });
+
+  it('It should fail invalid index', (done) => {
+    const genesisBlock = chain[0];
+    const faultBlock = {
+      index: 3,
+      timestamp: 1529844281,
+      data: 'Some test data',
+      previousHash:
+        'c6f835d626e32274037e31de606a140e8431ce0a9d416657e79cf85c16c5ca2f',
+      difficulty: 0,
+      hash: 'd2b8716411d3c0a0725fe748e8d42a8fd8bf72802bd1d4cfa81e4d796b5d6822'
+    };
+    expect(genesisBlock).to.be.a('object');
+    try {
+      Block.isValidNewBlock(faultBlock, genesisBlock);
+    } catch (err) {
+      expect(err.message).to.equal('Invalid index');
+    }
+    done();
+  });
+
+  it('It should fail previous hash', (done) => {
+    const genesisBlock = chain[0];
+    const faultBlock = {
+      index: 1,
+      timestamp: 1529844281,
+      data: 'Some test data',
+      previousHash: 'asuperfakehash',
+      difficulty: 0,
+      hash: 'dnsandicaisdubvajbsc'
+    };
+    expect(genesisBlock).to.be.a('object');
+    try {
+      Block.isValidNewBlock(faultBlock, genesisBlock);
+    } catch (err) {
+      expect(err.message).to.equal('Invalid previoushash');
+    }
+    done();
+  });
+
+  it('It should fail previous timestampe', (done) => {
+    const genesisBlock = chain[0];
+    const faultBlock = {
+      index: 1,
+      timestamp: 12,
+      data: 'Some test data',
+      previousHash: `${chain[0].hash}`,
+      difficulty: 0,
+      hash: 'd2b8716411d3c0a0725fe748e8d42a8fd8bf72802bd1d4cfa81e4d796b5d6822'
+    };
+    expect(genesisBlock).to.be.a('object');
+    try {
+      Block.isValidNewBlock(faultBlock, genesisBlock);
+    } catch (err) {
+      expect(err.message).to.equal('Invalid timestamp');
+    }
+    done();
+  });
 });
 
 describe('Check genesis block integrity', () => {
-    const chain = Blockchain.getBlockchain();
-    const genesisBlock = chain[0];
+  const chain = blockchain.getBlockchain();
+  const genesisBlock = chain[0];
 
-    it('It should be mined', (done) => {
-        expect(genesisBlock).to.be.a('object');
-        done();
-    });
+  it('It should be mined', (done) => {
+    expect(genesisBlock).to.be.a('object');
+    done();
+  });
 
-    it('It should have right values', (done) => {
-        expect(genesisBlock.index).to.be.eql(0);
-        expect(genesisBlock.previousHash).to.be.eql(SHA256('0').toString());
-        expect(genesisBlock.hash).to.be.eql(
-            SHA256(genesisBlock.index + genesisBlock.previousHash + genesisBlock.timestamp + genesisBlock.data + genesisBlock.difficulty).toString());
-        done();
-    });
+  it('It should have right values', (done) => {
+    expect(genesisBlock.index).to.be.eql(0);
+    expect(genesisBlock.previousHash).to.be.eql(SHA256('0').toString());
+    expect(genesisBlock.hash).to.be.eql(
+      SHA256(
+        genesisBlock.index +
+          genesisBlock.previousHash +
+          genesisBlock.timestamp +
+          genesisBlock.data +
+          genesisBlock.difficulty
+      ).toString()
+    );
+    done();
+  });
 });
 
 describe('Get chain and test integrity', () => {
-    const chain = Blockchain.getBlockchain();
-    const valid = Blockchain.checkValid();
-    const genesisBlock = chain[0];
-    const firstBlock = chain[1];
+  const chain = blockchain.getBlockchain();
+  const valid = blockchain.checkValid();
+  const genesisBlock = chain[0];
+  const firstBlock = chain[1];
 
-    it('Should be 2 blocks long', (done) => {
-        expect(chain).to.be.a('array').with.lengthOf(2);
-        done();
-    });
+  it('Should be 2 blocks long', (done) => {
+    expect(chain)
+      .to.be.a('array')
+      .with.lengthOf(2);
+    done();
+  });
 
-    it('It should be continuous', (done) => {
-        expect(firstBlock.previousHash).to.be.eql(genesisBlock.hash);
-        done();
-    });
+  it('It should be continuous', (done) => {
+    expect(firstBlock.previousHash).to.be.eql(genesisBlock.hash);
+    done();
+  });
 
-    it('It should be valid', (done) => {
-        expect(valid).to.be.eql(true);
-        done();
-    });
+  it('It should be valid', (done) => {
+    expect(valid).to.be.eql(true);
+    done();
+  });
 });

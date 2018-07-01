@@ -4,8 +4,7 @@
   "scripts": {
     "start": "node index.js",
     "debug": "node --inspect index.js",
-    "test": "nyc mocha",
-    "test-report": "nyc report"
+    "test": "nyc mocha"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -23,5 +22,10 @@
   },
   "engines": {
     "node": ">=8.5.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "mocha": true
+    }
   }
 }
