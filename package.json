@@ -4,12 +4,18 @@
   "scripts": {
     "start": "node index.js",
     "debug": "node --inspect index.js",
-    "test": "nyc mocha"
+    "test": "mocha -b && npm run test:report",
+    "test:report": "nyc report --reporter=lcov --reporter=html",
+    "docs:readme": "jsdoc2md --template README.md --separators --files ./*.js > README.md",
+    "docs:update": "jsdoc -c .jsdoc.json"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
     "crypto-js": "^3.1.9-1",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "jsdoc-to-markdown": "^3.0.0",
+    "jsdoc": "^3.5.5",
+    "docdash": "^0.4.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
@@ -17,15 +23,21 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "2.9.0",
     "jsdoc-to-markdown": "4.0.1",
+    "minami": "^1.2.3",
     "mocha": "^5.2.0",
     "nyc": "^12.0.2"
   },
   "engines": {
     "node": ">=8.5.0"
   },
-  "eslintConfig": {
-    "env": {
-      "mocha": true
-    }
+  "nyc": {
+    "include": [
+      "index.js"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "clean": true
   }
 }
