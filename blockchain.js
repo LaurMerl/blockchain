@@ -18,7 +18,7 @@ class Blockchain {
   // given a newBlock, uses latestBlock() to give its index, previousHash and hash
   addBlock(newBlock) {
     newBlock.previousHash = this.latestBlock().hash;
-    newBlock.hash = newBlock.calculateHash();
+    newBlock.hash = Block.calculateHash();
     this.chain.push(newBlock);
   }
 

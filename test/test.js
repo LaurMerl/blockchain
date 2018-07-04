@@ -8,7 +8,7 @@ const block = new Block();
 
 /* eslint-env mocha */
 describe('Mine new block', () => {
-  const newBlock = block.generateNextBlock('Some test data', blockchain);
+  const newBlock = Block.generateNextBlock('Some test data', blockchain);
   const chain = blockchain.getBlockchain();
 
   it('It should be mined', (done) => {
@@ -119,10 +119,11 @@ describe('Check genesis block integrity', () => {
     expect(genesisBlock.hash).to.be.eql(
       SHA256(
         genesisBlock.index +
-          genesisBlock.previousHash +
           genesisBlock.timestamp +
           genesisBlock.data +
-          genesisBlock.difficulty
+          genesisBlock.previousHash +
+          genesisBlock.difficulty +
+          genesisBlock.nonce
       ).toString()
     );
     done();

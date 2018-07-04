@@ -1,8 +1,7 @@
-import { json } from 'body-parser';
-import express from 'express';
-
-import Blockchain from './blockchain';
-import Block from './block';
+const json = require('body-parser');
+const express = require('express');
+const Blockchain = require('./blockchain');
+const Block = require('./block');
 
 const blockchain = new Blockchain();
 const block = new Block();
@@ -27,7 +26,7 @@ const initHttpServer = (myHttpPort) => {
   });
 
   app.listen(myHttpPort, () => {
-    console.log(`Listening http on port: + ${myHttpPort}`);
+    console.log(`Listening http on port: ${myHttpPort}`);
   });
 };
 

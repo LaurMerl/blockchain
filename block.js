@@ -2,7 +2,7 @@ const SHA256 = require('crypto-js/sha256');
 const utils = require('./utils');
 
 class Block {
-  constructor(index, timestamp, data, previousHash, difficulty) {
+  constructor(index, timestamp, data, previousHash, difficulty, nonce) {
     // location of block
     this.index = index;
     // when the block was created
@@ -10,11 +10,18 @@ class Block {
     this.data = data;
     // maintains the integrity of the chain
     this.previousHash = previousHash;
+    this.nonce = this.nonce;
     // mining mechanism
     this.difficulty = difficulty;
-    // this.nonce = nonce;
     // block’s own hash (derived from calculateHash)
-    this.hash = this.calculateHash();
+    this.hash = Block.calculateHash(
+      this.index,
+      this.timestamp,
+      this.data,
+      this.previousHash,
+      this.difficulty,
+      this.nonce
+    );
   }
 
   // creates the very first block of our chain
@@ -24,17 +31,18 @@ class Block {
       utils.getCurrentTimestamp(),
       utils.getCurrentDate,
       SHA256('0').toString(),
+      0,
       0
     );
   }
 
-  generateNextBlock(blockData, blockchain) {
+  static generateNextBlock(blockData, blockchain) {
     const previousBlock = blockchain.latestBlock();
     const chain = blockchain.getBlockchain();
     const difficulty = blockchain.getDifficulty(chain);
     const nextIndex = previousBlock.index + 1;
     const nextTimestamp = utils.getCurrentTimestamp();
-    const newBlock = this.mineBlock(
+    const newBlock = Block.mineBlock(
       nextIndex,
       previousBlock.hash,
       nextTimestamp,
@@ -48,31 +56,46 @@ class Block {
     return newBlock;
   }
 
-  calculateHash() {
+  // calculateHash() {
+  //   // takes in every piece of the block object, throws it into a SHA256 function,
+  //   // and converts it into a string
+  //   return SHA256(
+  //     this.index +
+  //       this.previousHash +
+  //       this.timestamp +
+  //       this.data +
+  //       this.difficulty
+  //   ).toString();
+  // }
+
+  static calculateHash(
     // takes in every piece of the block object, throws it into a SHA256 function,
     // and converts it into a string
+    index,
+    previousHash,
+    timestamp,
+    data,
+    difficulty,
+    nonce
+  ) {
     return SHA256(
-      this.index +
-        this.previousHash +
-        this.timestamp +
-        this.data +
-        this.difficulty
+      index + previousHash + timestamp + data + difficulty + nonce
     ).toString();
   }
 
-  mineBlock(index, previousHash, timestamp, data, difficulty) {
+  static mineBlock(index, previousHash, timestamp, data, difficulty) {
     let nonce = 0;
     while (true) {
-      const hash = this.calculateHash();
+      const hash = Block.calculateHash(
+        index,
+        previousHash,
+        timestamp,
+        data,
+        difficulty,
+        nonce
+      );
       if (Block.hashMatchesDifficulty(hash, difficulty)) {
-        return new Block(
-          index,
-          timestamp,
-          data,
-          previousHash,
-          difficulty,
-          hash
-        );
+        return new Block(index, timestamp, data, previousHash, difficulty);
       }
       nonce += 1;
     }

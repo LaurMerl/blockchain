@@ -10,5 +10,9 @@
         "functions": "ignore"
       }
     ]
+  },
+  "env": {
+    "node": true,
+    "mocha": true
   }
 }
