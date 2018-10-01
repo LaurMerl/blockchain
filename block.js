@@ -2,6 +2,7 @@ const SHA256 = require('crypto-js/sha256');
 const utils = require('./utils');
 
 class Block {
+  /** @constructor */
   constructor(index, timestamp, data, previousHash, difficulty, nonce) {
     // location of block
     this.index = index;
@@ -24,7 +25,9 @@ class Block {
     );
   }
 
-  // creates the very first block of our chain
+  /**
+   * Creates the very first block of our chain
+   */
   static createGenesis() {
     return new Block(
       0,
@@ -36,6 +39,12 @@ class Block {
     );
   }
 
+  /**
+   * Creates a block for the chain.
+   * @param {String} - Block infromation
+   * @param {Blockchain} - Current blockchain
+   * @returns {Block} - Newly created block
+   */
   static generateNextBlock(blockData, blockchain) {
     const previousBlock = blockchain.latestBlock();
     const chain = blockchain.getBlockchain();
@@ -56,9 +65,17 @@ class Block {
     return newBlock;
   }
 
+  /**
+   * Takes in every piece of the block object, throws it into a SHA256 function, and converts it into a string.
+   * @param {Integer} - Block index
+   * @param {String} - Block previousHash
+   * @param {Integer} - Block timestamp
+   * @param {Integer} - Block data
+   * @param {Integer} - Block difficulty
+   * @param {Integer} - Block nonce
+   * @returns {String} - Encrypted block infromation
+   */
   static calculateHash(
-    // takes in every piece of the block object, throws it into a SHA256 function,
-    // and converts it into a string
     index,
     previousHash,
     timestamp,
@@ -71,6 +88,15 @@ class Block {
     ).toString();
   }
 
+  /**
+   * Block's creation.
+   * @param {Integer} - Block index
+   * @param {String} - Block previousHash
+   * @param {Integer} - Block timestamp
+   * @param {Integer} - Block data
+   * @param {Integer} - Block difficulty
+   * @returns {Block} - New block object
+   */
   static mineBlock(index, previousHash, timestamp, data, difficulty) {
     let nonce = 0;
     while (true) {
@@ -89,12 +115,24 @@ class Block {
     }
   }
 
+  /**
+   * Block matches current chain's difficulty.
+   * @param {String} - Hash
+   * @param {Number} - Difficulty
+   * @returns {Boolean} - True if block matches current chain's difficulty
+   */
   static hashMatchesDifficulty(hash, difficulty) {
     const hashInBinary = utils.hexToBinary(hash);
     const requiredPrefix = '0'.repeat(difficulty);
     return hashInBinary.startsWith(requiredPrefix);
   }
 
+  /**
+   * Block's validity.
+   * @param {Block} - New block
+   * @param {Block} - Previous block
+   * @returns {Boolean} - True if new block is valid
+   */
   static isValidNewBlock(newBlock, previousBlock) {
     if (previousBlock.index + 1 !== newBlock.index) {
       throw new Error('Invalid index');
@@ -106,6 +144,12 @@ class Block {
     return true;
   }
 
+  /**
+   * Block's timestamp validity.
+   * @param {Block} - New block
+   * @param {Block} - Previous block
+   * @returns {Boolean} - True new block timestamp is valid
+   */
   static isValidTimestamp(newBlock, previousBlock) {
     return (
       previousBlock.timestamp - 60 < newBlock.timestamp &&

@@ -2,27 +2,41 @@ const Block = require('./block');
 const utils = require('./utils');
 
 class Blockchain {
+  /** @constructor */
   constructor() {
     this.chain = [Block.createGenesis()];
   }
 
-  // get the information about the most recent block
+  /**
+   * Get the information about the most recent block.
+   * @returns {Block} 
+   */
   latestBlock() {
     return this.chain[this.chain.length - 1];
   }
 
+  /**
+   * Get the chain.
+   * @returns {Blockchain} 
+   */
   getBlockchain() {
     return this.chain;
   }
 
-  // given a newBlock, uses latestBlock() to give its index, previousHash and hash
+  /**
+   * Given a newBlock, uses latestBlock() to give its index, previousHash and hash
+   * @param {Block} - block object
+   */
   addBlock(newBlock) {
     newBlock.previousHash = this.latestBlock().hash;
     newBlock.hash = Block.calculateHash();
     this.chain.push(newBlock);
   }
 
-  // checks the the integrity of the blockchain
+  /**
+   * Checks the the integrity of the blockchain
+   * @returns {Boolean} - true if block is valid
+   */
   checkValid() {
     for (let i = 1; i < this.chain.length; i += 1) {
       if (!Block.isValidNewBlock(this.chain[i], this.chain[i - 1])) {
@@ -32,22 +46,31 @@ class Blockchain {
     return true;
   }
 
-  // retrieve the difficulty of the chain
+  /**
+   * Retrieve the difficulty of the chain
+   * @param {Blockchain} - current blockchain
+   * @returns {Number} - chain's difficulty
+   */
   getDifficulty(aBlockchain) {
     const latestBlock = this.latestBlock();
     if (
       latestBlock.index % utils.DIFFICULTY_ADJUSTMENT_INTERVAL === 0 &&
       latestBlock.index !== 0
     ) {
-      return Blockchain.getAdjustedDifficulty(latestBlock, aBlockchain);
+      return Blockchain.getAdjustedDifficulty(aBlockchain);
     }
     return latestBlock.difficulty;
   }
 
-  // the difficulty must be adjusted in order to match the chain difficulty
-  // For every DIFFICULTY_ADJUSTMENT_INTERVAL blocks that is generated, 
-  // we check if the time that took to generate those blocks are larger or smaller than the expected BLOCK_GENERATION_INTERVAL time
-  static getAdjustedDifficulty(latestBlock, aBlockchain) {
+  /**
+   * The difficulty must be adjusted in order to match the chain difficulty
+   * For every DIFFICULTY_ADJUSTMENT_INTERVAL blocks that is generated, 
+   * we check if the time that took to generate those blocks are larger or smaller than the expected BLOCK_GENERATION_INTERVAL time
+   * @param {Blockchain} - current blockchain
+   * @returns {Number} - adjusted block difficulty
+   */
+  static getAdjustedDifficulty(aBlockchain) {
+    const latestBlock = aBlockchain[aBlockchain.length -1];
     const prevAdjustmentBlock =
       aBlockchain[aBlockchain.length - utils.DIFFICULTY_ADJUSTMENT_INTERVAL];
     const timeExpected =

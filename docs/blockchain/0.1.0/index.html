@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3>blockchain 0.1.0</h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h2>Classes</h2><dl>
+<dt><a href="#Block">Block</a></dt>
+<dd></dd>
+<dt><a href="#Blockchain">Blockchain</a></dt>
+<dd></dd>
+</dl>
+
+<h2>Constants</h2><dl>
+<dt><a href="#BLOCK_GENERATION_INTERVAL">BLOCK_GENERATION_INTERVAL</a> ⇒ <code>Number</code></dt>
+<dd><p>Consensus on the difficulty in seconds.</p>
+</dd>
+<dt><a href="#DIFFICULTY_ADJUSTMENT_INTERVAL">DIFFICULTY_ADJUSTMENT_INTERVAL</a> ⇒ <code>Number</code></dt>
+<dd><p>Consensus on the difficulty in blocks.</p>
+</dd>
+</dl>
+
+<h2>Functions</h2><dl>
+<dt><a href="#hexToBinary">hexToBinary()</a> ⇒ <code>String</code></dt>
+<dd><p>Conversion function from  Hex to Binary.</p>
+</dd>
+</dl>
+
+<p><a name="Block"></a></p>
+<h2>Block</h2><p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#Block">Block</a><ul>
+<li><a href="#Block.createGenesis">.createGenesis()</a></li>
+<li><a href="#Block.generateNextBlock">.generateNextBlock(blockData, blockchain)</a> ⇒ <a href="#Block"><code>Block</code></a></li>
+<li><a href="#Block.calculateHash">.calculateHash(index, previousHash, timestamp, data, difficulty, nonce)</a> ⇒ <code>String</code></li>
+<li><a href="#Block.mineBlock">.mineBlock(index, previousHash, timestamp, data, difficulty)</a> ⇒ <a href="#Block"><code>Block</code></a></li>
+<li><a href="#Block.hashMatchesDifficulty">.hashMatchesDifficulty(hash, difficulty)</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Block.isValidNewBlock">.isValidNewBlock(newBlock, previousBlock)</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Block.isValidTimestamp">.isValidTimestamp(newBlock, previousBlock)</a> ⇒ <code>Boolean</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><a name="Block.createGenesis"></a></p>
+<h3>Block.createGenesis()</h3><p>Creates the very first block of our chain</p>
+<p><strong>Kind</strong>: static method of <a href="#Block"><code>Block</code></a>  </p>
+<hr>
+<p><a name="Block.generateNextBlock"></a></p>
+<h3>Block.generateNextBlock(blockData, blockchain) ⇒ <a href="#Block"><code>Block</code></a></h3><p>Creates a block for the chain.</p>
+<p><strong>Kind</strong>: static method of <a href="#Block"><code>Block</code></a><br><strong>Returns</strong>: <a href="#Block"><code>Block</code></a> - - Newly created block  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>blockData</td>
+<td><code>String</code></td>
+<td>Block infromation</td>
+</tr>
+<tr>
+<td>blockchain</td>
+<td><a href="#Blockchain"><code>Blockchain</code></a></td>
+<td>Current blockchain</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a name="Block.calculateHash"></a></p>
+<h3>Block.calculateHash(index, previousHash, timestamp, data, difficulty, nonce) ⇒ <code>String</code></h3><p>Takes in every piece of the block object, throws it into a SHA256 function, and converts it into a string.</p>
+<p><strong>Kind</strong>: static method of <a href="#Block"><code>Block</code></a><br><strong>Returns</strong>: <code>String</code> - - Encrypted block infromation  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>index</td>
+<td><code>Integer</code></td>
+<td>Block index</td>
+</tr>
+<tr>
+<td>previousHash</td>
+<td><code>String</code></td>
+<td>Block previousHash</td>
+</tr>
+<tr>
+<td>timestamp</td>
+<td><code>Integer</code></td>
+<td>Block timestamp</td>
+</tr>
+<tr>
+<td>data</td>
+<td><code>Integer</code></td>
+<td>Block data</td>
+</tr>
+<tr>
+<td>difficulty</td>
+<td><code>Integer</code></td>
+<td>Block difficulty</td>
+</tr>
+<tr>
+<td>nonce</td>
+<td><code>Integer</code></td>
+<td>Block nonce</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a name="Block.mineBlock"></a></p>
+<h3>Block.mineBlock(index, previousHash, timestamp, data, difficulty) ⇒ <a href="#Block"><code>Block</code></a></h3><p>Block's creation.</p>
+<p><strong>Kind</strong>: static method of <a href="#Block"><code>Block</code></a><br><strong>Returns</strong>: <a href="#Block"><code>Block</code></a> - - New block object  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>index</td>
+<td><code>Integer</code></td>
+<td>Block index</td>
+</tr>
+<tr>
+<td>previousHash</td>
+<td><code>String</code></td>
+<td>Block previousHash</td>
+</tr>
+<tr>
+<td>timestamp</td>
+<td><code>Integer</code></td>
+<td>Block timestamp</td>
+</tr>
+<tr>
+<td>data</td>
+<td><code>Integer</code></td>
+<td>Block data</td>
+</tr>
+<tr>
+<td>difficulty</td>
+<td><code>Integer</code></td>
+<td>Block difficulty</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a name="Block.hashMatchesDifficulty"></a></p>
+<h3>Block.hashMatchesDifficulty(hash, difficulty) ⇒ <code>Boolean</code></h3><p>Block matches current chain's difficulty.</p>
+<p><strong>Kind</strong>: static method of <a href="#Block"><code>Block</code></a><br><strong>Returns</strong>: <code>Boolean</code> - - True if block matches current chain's difficulty  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hash</td>
+<td><code>String</code></td>
+<td>Hash</td>
+</tr>
+<tr>
+<td>difficulty</td>
+<td><code>Number</code></td>
+<td>Difficulty</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a name="Block.isValidNewBlock"></a></p>
+<h3>Block.isValidNewBlock(newBlock, previousBlock) ⇒ <code>Boolean</code></h3><p>Block's validity.</p>
+<p><strong>Kind</strong>: static method of <a href="#Block"><code>Block</code></a><br><strong>Returns</strong>: <code>Boolean</code> - - True if new block is valid  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>newBlock</td>
+<td><a href="#Block"><code>Block</code></a></td>
+<td>New block</td>
+</tr>
+<tr>
+<td>previousBlock</td>
+<td><a href="#Block"><code>Block</code></a></td>
+<td>Previous block</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a name="Block.isValidTimestamp"></a></p>
+<h3>Block.isValidTimestamp(newBlock, previousBlock) ⇒ <code>Boolean</code></h3><p>Block's timestamp validity.</p>
+<p><strong>Kind</strong>: static method of <a href="#Block"><code>Block</code></a><br><strong>Returns</strong>: <code>Boolean</code> - - True new block timestamp is valid  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>newBlock</td>
+<td><a href="#Block"><code>Block</code></a></td>
+<td>New block</td>
+</tr>
+<tr>
+<td>previousBlock</td>
+<td><a href="#Block"><code>Block</code></a></td>
+<td>Previous block</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a name="Blockchain"></a></p>
+<h2>Blockchain</h2><p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#Blockchain">Blockchain</a><ul>
+<li><em>instance</em><ul>
+<li><a href="#Blockchain+latestBlock">.latestBlock()</a> ⇒ <a href="#Block"><code>Block</code></a></li>
+<li><a href="#Blockchain+getBlockchain">.getBlockchain()</a> ⇒ <a href="#Blockchain"><code>Blockchain</code></a></li>
+<li><a href="#Blockchain+addBlock">.addBlock(newBlock)</a></li>
+<li><a href="#Blockchain+checkValid">.checkValid()</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Blockchain+getDifficulty">.getDifficulty(aBlockchain)</a> ⇒ <code>Number</code></li>
+</ul>
+</li>
+<li><em>static</em><ul>
+<li><a href="#Blockchain.getAdjustedDifficulty">.getAdjustedDifficulty(aBlockchain)</a> ⇒ <code>Number</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><a name="Blockchain+latestBlock"></a></p>
+<h3>blockchain.latestBlock() ⇒ <a href="#Block"><code>Block</code></a></h3><p>Get the information about the most recent block.</p>
+<p><strong>Kind</strong>: instance method of <a href="#Blockchain"><code>Blockchain</code></a>  </p>
+<hr>
+<p><a name="Blockchain+getBlockchain"></a></p>
+<h3>blockchain.getBlockchain() ⇒ <a href="#Blockchain"><code>Blockchain</code></a></h3><p>Get the chain.</p>
+<p><strong>Kind</strong>: instance method of <a href="#Blockchain"><code>Blockchain</code></a>  </p>
+<hr>
+<p><a name="Blockchain+addBlock"></a></p>
+<h3>blockchain.addBlock(newBlock)</h3><p>Given a newBlock, uses latestBlock() to give its index, previousHash and hash</p>
+<p><strong>Kind</strong>: instance method of <a href="#Blockchain"><code>Blockchain</code></a>  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>newBlock</td>
+<td><a href="#Block"><code>Block</code></a></td>
+<td>block object</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a name="Blockchain+checkValid"></a></p>
+<h3>blockchain.checkValid() ⇒ <code>Boolean</code></h3><p>Checks the the integrity of the blockchain</p>
+<p><strong>Kind</strong>: instance method of <a href="#Blockchain"><code>Blockchain</code></a><br><strong>Returns</strong>: <code>Boolean</code> - - true if block is valid  </p>
+<hr>
+<p><a name="Blockchain+getDifficulty"></a></p>
+<h3>blockchain.getDifficulty(aBlockchain) ⇒ <code>Number</code></h3><p>Retrieve the difficulty of the chain</p>
+<p><strong>Kind</strong>: instance method of <a href="#Blockchain"><code>Blockchain</code></a><br><strong>Returns</strong>: <code>Number</code> - - chain's difficulty  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>aBlockchain</td>
+<td><a href="#Blockchain"><code>Blockchain</code></a></td>
+<td>current blockchain</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a name="Blockchain.getAdjustedDifficulty"></a></p>
+<h3>Blockchain.getAdjustedDifficulty(aBlockchain) ⇒ <code>Number</code></h3><p>The difficulty must be adjusted in order to match the chain difficulty
+For every DIFFICULTY_ADJUSTMENT_INTERVAL blocks that is generated, 
+we check if the time that took to generate those blocks are larger or smaller than the expected BLOCK_GENERATION_INTERVAL time</p>
+<p><strong>Kind</strong>: static method of <a href="#Blockchain"><code>Blockchain</code></a><br><strong>Returns</strong>: <code>Number</code> - - adjusted block difficulty  </p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>aBlockchain</td>
+<td><a href="#Blockchain"><code>Blockchain</code></a></td>
+<td>current blockchain</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a name="BLOCK_GENERATION_INTERVAL"></a></p>
+<h2>BLOCK_GENERATION_INTERVAL ⇒ <code>Number</code></h2><p>Consensus on the difficulty in seconds.</p>
+<p><strong>Kind</strong>: global constant  </p>
+<hr>
+<p><a name="DIFFICULTY_ADJUSTMENT_INTERVAL"></a></p>
+<h2>DIFFICULTY_ADJUSTMENT_INTERVAL ⇒ <code>Number</code></h2><p>Consensus on the difficulty in blocks.</p>
+<p><strong>Kind</strong>: global constant  </p>
+<hr>
+<p><a name="hexToBinary"></a></p>
+<h2>hexToBinary() ⇒ <code>String</code></h2><p>Conversion function from  Hex to Binary.</p>
+<p><strong>Kind</strong>: global function<br><strong>Returns</strong>: <code>String</code> - - Binary value as string  </p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>String</code></td>
+<td>Hex string to be converted</td>
+</tr>
+</tbody>
+</table>
+<hr></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Oct 01 2018 15:53:31 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,14 +1,14 @@
 {
   "name": "blockchain",
   "description": "Simple NodeJS blockchain project",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "license": "ISC",
   "scripts": {
     "start": "node index.js",
     "debug": "node --inspect index.js",
     "test": "mkdir -p .nyc_output; nyc mocha -b; npm run test:report",
     "test:report": "nyc report --reporter=lcov --reporter=html",
-    "docs:readme": "jsdoc2md --template README.md --separators --files ./*.js > README.md",
+    "docs:readme": "jsdoc2md --separators --files ./*.js > README.md",
     "docs:update": "jsdoc -c .jsdoc.json"
   },
   "dependencies": {
