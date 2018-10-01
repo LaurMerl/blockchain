@@ -2,7 +2,7 @@
 // in seconds
 const BLOCK_GENERATION_INTERVAL = 10;
 // in blocks
-const DIFFICULTY_ADJUSTMENT_INTERVAL = 10;
+const DIFFICULTY_ADJUSTMENT_INTERVAL = 4;
 
 const getCurrentTimestamp = () => Math.round(new Date().getTime() / 1000);
 

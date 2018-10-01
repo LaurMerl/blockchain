@@ -56,18 +56,6 @@ class Block {
     return newBlock;
   }
 
-  // calculateHash() {
-  //   // takes in every piece of the block object, throws it into a SHA256 function,
-  //   // and converts it into a string
-  //   return SHA256(
-  //     this.index +
-  //       this.previousHash +
-  //       this.timestamp +
-  //       this.data +
-  //       this.difficulty
-  //   ).toString();
-  // }
-
   static calculateHash(
     // takes in every piece of the block object, throws it into a SHA256 function,
     // and converts it into a string

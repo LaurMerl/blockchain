@@ -4,7 +4,6 @@ const Blockchain = require('./blockchain');
 const Block = require('./block');
 
 const blockchain = new Blockchain();
-const block = new Block();
 
 const httpPort = parseInt(process.env.HTTP_PORT, 10) || 3001;
 
@@ -13,11 +12,11 @@ const initHttpServer = (myHttpPort) => {
   app.use(json());
 
   app.get('/blocks', (req, res) => {
-    res.send(blockchain.getBlockchain());
+    res.send(JSON.stringify(blockchain.getBlockchain(), null, 4));
   });
 
   app.post('/mineBlock', (req, res) => {
-    const newBlock = block.generateNextBlock(req.body.data, blockchain);
+    const newBlock = Block.generateNextBlock(req.body.data, blockchain);
     res.send(newBlock);
   });
 

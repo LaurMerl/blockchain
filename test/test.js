@@ -1,10 +1,13 @@
+var chai = require("chai");
 const { expect } = require('chai');
+chai.should();
+chai.use(require('chai-things'));
+
 const SHA256 = require('crypto-js/sha256');
 const Blockchain = require('../blockchain');
 const Block = require('../block');
 
 const blockchain = new Blockchain();
-const block = new Block();
 
 /* eslint-env mocha */
 describe('Mine new block', () => {
@@ -12,9 +15,8 @@ describe('Mine new block', () => {
   const chain = blockchain.getBlockchain();
 
   it('It should be mined', (done) => {
-    expect(chain)
-      .to.be.a('array')
-      .with.lengthOf(2);
+    expect(chain).to.be.a('array')
+    expect(chain.length).to.be.gte(2);
     done();
   });
 
@@ -84,7 +86,7 @@ describe('Mine new block', () => {
     done();
   });
 
-  it('It should fail previous timestampe', (done) => {
+  it('It should fail previous timestamp', (done) => {
     const genesisBlock = chain[0];
     const faultBlock = {
       index: 1,
@@ -137,9 +139,8 @@ describe('Get chain and test integrity', () => {
   const firstBlock = chain[1];
 
   it('Should be 2 blocks long', (done) => {
-    expect(chain)
-      .to.be.a('array')
-      .with.lengthOf(2);
+    expect(chain).to.be.a('array')
+    expect(chain.length).to.be.gte(2);
     done();
   });
 
@@ -150,6 +151,20 @@ describe('Get chain and test integrity', () => {
 
   it('It should be valid', (done) => {
     expect(valid).to.be.eql(true);
+    done();
+  });
+});
+
+describe('Increase difficulty over 5 blocks', () => {
+  for (i = 0; i <= 3; i++ ) {
+    Block.generateNextBlock(`Some data for block ${i}`, blockchain);
+  }
+  const chain = blockchain.getBlockchain();
+
+  it('Should be 5 blocks long (genesis excluded)', (done) => {
+    expect(chain.length).to.be.eql(6);
+    chain.should.all.have.property('difficulty');
+    chain.should.contain.an.item.with.property( 'difficulty', 1)
     done();
   });
 });

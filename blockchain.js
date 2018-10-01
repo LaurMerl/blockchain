@@ -45,6 +45,8 @@ class Blockchain {
   }
 
   // the difficulty must be adjusted in order to match the chain difficulty
+  // For every DIFFICULTY_ADJUSTMENT_INTERVAL blocks that is generated, 
+  // we check if the time that took to generate those blocks are larger or smaller than the expected BLOCK_GENERATION_INTERVAL time
   static getAdjustedDifficulty(latestBlock, aBlockchain) {
     const prevAdjustmentBlock =
       aBlockchain[aBlockchain.length - utils.DIFFICULTY_ADJUSTMENT_INTERVAL];
@@ -56,7 +58,6 @@ class Blockchain {
     } else if (timeTaken > timeExpected * 2) {
       return prevAdjustmentBlock.difficulty - 1;
     }
-    return prevAdjustmentBlock.difficulty;
   }
 }
 
