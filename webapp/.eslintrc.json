@@ -1,0 +1,39 @@
+{
+    "extends": "airbnb",
+    "plugins": [
+        "react",
+        "jsx-a11y",
+        "import"
+    ],
+    "rules": {
+        "indent": ["error", 4],
+        "react/jsx-indent":["error", 4],
+        "react/jsx-indent-props": ["error", 4],
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+        "no-param-reassign": 0,
+        "max-len": 0,
+        "import/named": 2,
+        "function-paren-newline": 0,
+        "import/no-unresolved": [2, {
+            "ignore": ["base/component/*", "base/element/*"]
+        }],
+        "import/export": 2
+    },
+    "env": {
+        "jest": true
+    },
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "allowImportExportEverywhere": true
+    },
+    "settings": {
+        "import/core-modules": [
+            "modules",
+            "utils",
+            "utils/helpers",
+            "utils/Loadable",
+            "utils/environment",
+            "base"
+        ]
+    }
+}

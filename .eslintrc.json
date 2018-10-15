@@ -1,7 +1,7 @@
 {
   "extends": "airbnb-base",
   "rules": {
-    "indent": ["error", 2],
+    "indent": ["error",  "tab"],
     "no-underscore-dangle": 0,
     "function-paren-newline": ["error", "consistent"],
     "comma-dangle": [
